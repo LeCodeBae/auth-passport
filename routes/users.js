@@ -7,13 +7,14 @@ var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 var db = require('../models')
 var app = express()
+var bcrypt = require('bcrypt')
 
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
     console.log(username)
     db.User.findOne({where: { username: username }}).then(function (user) {
-      console.log(user)
+      if(bcrypt.compare(password, user.password))
       done(null, user)
     }) ;
   }
